@@ -1,6 +1,6 @@
 {
   "name": "treemap-js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A binary tree based map (aka dictionary) data type for Javascript, keeping keys sorted at all times",
   "main": "TreeMap.js",
   "repository": {

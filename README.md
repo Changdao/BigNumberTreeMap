@@ -2,7 +2,7 @@
 A binary tree based map (aka dictionary) data type for Javascript, keeping keys sorted at all times. Provides `O(log n)` average case performance for inserting, retrieving and removing values.
 
 ## Installation
-`TreeMap.js` works with Node and in the browser.
+Works with Node and in the browser.
 
 ### Node
 Install via `npm install treemap-js`. Then access the TreeMap like this:
