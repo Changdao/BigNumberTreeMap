@@ -90,7 +90,7 @@
 
             internalEach(node.left, callback, function () {
                 if (typeof callback === "function") {
-                    call(callback, node.value);
+                    call(callback, node.value, node.key);
                 }
 
                 internalEach(node.right, callback, function () {

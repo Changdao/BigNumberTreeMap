@@ -27,6 +27,10 @@ map.get("my first key");    // returns 2342
 
 map.getLength();    //  returns 2
 
+map.each(function (value, key) {
+    // do something...
+});
+
 map.remove("my first key");
 map.getLength();    // returns 1
 
