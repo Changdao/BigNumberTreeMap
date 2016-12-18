@@ -20,13 +20,14 @@ var map = new TreeMap();
 
 map.set("my first key", "hello");    // keys can be strings, numbers or booleans. Values can be any data type
 map.set("second key", [ 1, 3, 4 ]);
-
 map.get("my first key");    // returns "hello"
+
+map.set("my first key", 2342);
+map.get("my first key");    // returns 2342
 
 map.getLength();    //  returns 2
 
 map.remove("my first key");
-
 map.getLength();    // returns 1
 
 map.getTree();    // returns the backing tree object
