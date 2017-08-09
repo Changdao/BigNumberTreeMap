@@ -64,7 +64,7 @@
         }
 
         function call (callback) {
-            let args = Array.prototype.slice.call(arguments, 1);
+            var args = Array.prototype.slice.call(arguments, 1);
 
             if (typeof callback === "function") {
                 callback.apply(void 0, args);
