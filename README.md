@@ -27,6 +27,9 @@ map.get("my first key");    // returns 2342
 
 map.getLength();    //  returns 2
 
+map.getMinKey();    // returns "my first key"
+map.getMaxKey();    // returns "second key"
+
 map.each(function (value, key) {
     // do something...
 });
