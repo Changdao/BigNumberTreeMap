@@ -3,7 +3,7 @@
  *
  * MIT License
  *
- * Copyright (c) 2016 Adrian Wirth
+ * Copyright (c) 2016-2018 Adrian Wirth
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -46,6 +46,8 @@
             get: get,
             getTree: getTree,
             getLength: getLength,
+            getMaxKey: getMaxKey,
+            getMinKey: getMinKey,
             remove: remove
         };
 
@@ -64,7 +66,7 @@
         }
 
         function call (callback) {
-            let args = Array.prototype.slice.call(arguments, 1);
+            var args = Array.prototype.slice.call(arguments, 1);
 
             if (typeof callback === "function") {
                 callback.apply(void 0, args);
@@ -150,9 +152,37 @@
             return node;
         }
 
+        function getMaxKey () {
+            var maxNode = getMaxNode(root);
+
+            if (maxNode !== null) {
+                return maxNode.key;
+            }
+
+            return maxNode;
+        }
+
+        function getMinKey () {
+            var minNode = getMinNode(root);
+
+            if (minNode !== null) {
+                return minNode.key;
+            }
+
+            return minNode;
+        }
+
         function getMaxNode (node) {
-            while (node.right !== null) {
+            while (node !== null && node.right !== null) {
                 node = node.right;
+            }
+
+            return node;
+        }
+
+        function getMinNode(node) {
+            while (node !== null && node.left !== null) {
+                node = node.left;
             }
 
             return node;
