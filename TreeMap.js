@@ -30,12 +30,14 @@
 
 (function() {
 
+    const BigNumber = require('bignumber.js');
+    
     if (typeof window === "object") {
         throw new Error('BigNumberTreeMap does not support browser environment yet!');
     } else {
-        const BigNumber = require('bignumber.js');
         module.exports = TreeMap;
     }
+
 
     function TreeMap() {
 
