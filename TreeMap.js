@@ -26,15 +26,18 @@
 
 "use strict";
 
-(function () {
+
+
+(function() {
 
     if (typeof window === "object") {
-        window.TreeMap = TreeMap;
+        throw new Error('BigNumberTreeMap does not support browser environment yet!');
     } else {
+        const BigNumber = require('bignumber.js');
         module.exports = TreeMap;
     }
 
-    function TreeMap () {
+    function TreeMap() {
 
         var root = null;
         var keyType = void 0;
@@ -51,7 +54,10 @@
             remove: remove
         };
 
-        function checkKey (key, checkKeyType) {
+        function checkKey(key, checkKeyType) {
+            if (key instanceof BigNumber)
+                return 'BigNumber';
+
             var localKeyType = typeof key;
 
             if (localKeyType !== "number" && localKeyType !== "string" && localKeyType !== "boolean") {
@@ -65,7 +71,7 @@
             return localKeyType;
         }
 
-        function call (callback) {
+        function call(callback) {
             var args = Array.prototype.slice.call(arguments, 1);
 
             if (typeof callback === "function") {
@@ -73,63 +79,74 @@
             }
         }
 
-        function getTree () {
+        function getTree() {
             return root;
         }
 
-        function getLength () {
+        function getLength() {
             return length;
         }
 
-        function each (callback) {
+        function each(callback) {
             internalEach(root, callback);
         }
 
-        function internalEach (node, callback, internalCallback) {
+        function internalEach(node, callback, internalCallback) {
             if (node === null) {
                 return call(internalCallback);
             }
 
-            internalEach(node.left, callback, function () {
+            internalEach(node.left, callback, function() {
                 call(callback, node.value, node.key);
 
-                internalEach(node.right, callback, function () {
+                internalEach(node.right, callback, function() {
                     call(internalCallback);
                 })
             });
         }
 
-        function get (key) {
+        function get(key) {
             checkKey(key);
 
             return internalGet(key, root);
         }
 
-        function internalGet (key, node) {
+        function internalGet(key, node) {
             if (node === null) {
                 return void 0;
             }
 
-            if (key < node.key) {
-                return internalGet(key, node.left);
-            } else if (key > node.key) {
-                return internalGet(key, node.right);
+            if (key instanceOf BigNumber) {
+                if (key.lt(node.key)) {
+                    return internalGet(key, node.left);
+                } else if (key.gt(node.key)) {
+                    return internalGet(key, node.right);
+                } else {
+                    return node.value;
+                }
             } else {
-                return node.value;
+                if (key < node.key) {
+                    return internalGet(key, node.left);
+                } else if (key > node.key) {
+                    return internalGet(key, node.right);
+                } else {
+                    return node.value;
+                }
             }
+
         }
 
-        function set (key, value) {
+        function set(key, value) {
             if (root === null) {
                 keyType = checkKey(key);
             } else {
                 checkKey(key, true);
             }
 
-            root = internalSet (key, value, root);
+            root = internalSet(key, value, root);
         }
 
-        function internalSet (key, value, node) {
+        function internalSet(key, value, node) {
             if (node === null) {
                 length++;
 
@@ -140,19 +157,30 @@
                     right: null
                 };
             }
+            if (key instanceof BigNumber) {
+                if (key.lt(node.key)) {
+                    node.left = internalSet(key, value, node.left);
 
-            if (key < node.key) {
-                node.left = internalSet(key, value, node.left);
-            } else if (key > node.key) {
-                node.right = internalSet(key, value, node.right);
+                } else if (key.gt(node.key)) {
+                    node.right = internalSet(key, value, node.right);
+                } else {
+                    node.value = value;
+                }
             } else {
-                node.value = value;
+                if (key < node.key) {
+                    node.left = internalSet(key, value, node.left);
+                } else if (key > node.key) {
+                    node.right = internalSet(key, value, node.right);
+                } else {
+                    node.value = value;
+                }
             }
+
 
             return node;
         }
 
-        function getMaxKey () {
+        function getMaxKey() {
             var maxNode = getMaxNode(root);
 
             if (maxNode !== null) {
@@ -162,7 +190,7 @@
             return maxNode;
         }
 
-        function getMinKey () {
+        function getMinKey() {
             var minNode = getMinNode(root);
 
             if (minNode !== null) {
@@ -172,7 +200,7 @@
             return minNode;
         }
 
-        function getMaxNode (node) {
+        function getMaxNode(node) {
             while (node !== null && node.right !== null) {
                 node = node.right;
             }
@@ -188,45 +216,82 @@
             return node;
         }
 
-        function remove (key) {
+        function remove(key) {
             checkKey(key);
 
-            root = internalRemove (key, root);
+            root = internalRemove(key, root);
         }
 
-        function internalRemove (key, node) {
+        function internalRemove(key, node) {
             if (node === null) {
                 return null;
             }
-
-            if (key < node.key) {
-                node.left = internalRemove(key, node.left);
-            } else if (key > node.key) {
-                node.right = internalRemove(key, node.right);
-            } else {
-                if (node.left !== null && node.right !== null) {
-                    var maxNode = getMaxNode(node.left);
-
-                    var maxNodeKey = maxNode.key;
-                    var maxNodeValue = maxNode.value;
-
-                    maxNode.key = node.key;
-                    maxNode.value = node.value;
-                    node.key = maxNodeKey;
-                    node.value = maxNodeValue;
-
+            if (key instanceof BigNumber) {
+                if( key.lt(node.key))
+                {
                     node.left = internalRemove(key, node.left);
-                } else if (node.left !== null) {
-                    length--;
-                    return node.left;
-                } else if (node.right !== null) {
-                    length--;
-                    return node.right;
+                }
+                else if(key.gt(node.key)){
+                    node.right = internalRemove(key, node.right);
+                }
+                else 
+                {
+                    if(node.left !==null && node.right !==null){
+                        var maxNode = getMaxNode(node.left);
+
+                        var maxNodeKey = maxNode.key;
+                        var maxNodeValue = maxNode.value;
+
+                        maxNode.key = node.key;
+                        maxNode.value = node.value;
+                        node.key = maxNodeKey;
+                        node.value = maxNodeValue;
+
+                        node.left = internalRemove(key, node.left);
+
+                    }else if(node.left !== null){
+                        length --;
+                        return node.left;
+                    }else if (node.right !==null){
+                        length --;
+                        return node.right;
+                    }else {
+                        length --;
+                        return null;
+                    }
+                }
+            } else {
+                
+                if (key < node.key) {
+                    node.left = internalRemove(key, node.left);
+                } else if (key > node.key) {
+                    node.right = internalRemove(key, node.right);
                 } else {
-                    length--;
-                    return null;
+                    if (node.left !== null && node.right !== null) {
+                        var maxNode = getMaxNode(node.left);
+
+                        var maxNodeKey = maxNode.key;
+                        var maxNodeValue = maxNode.value;
+
+                        maxNode.key = node.key;
+                        maxNode.value = node.value;
+                        node.key = maxNodeKey;
+                        node.value = maxNodeValue;
+
+                        node.left = internalRemove(key, node.left);
+                    } else if (node.left !== null) {
+                        length--;
+                        return node.left;
+                    } else if (node.right !== null) {
+                        length--;
+                        return node.right;
+                    } else {
+                        length--;
+                        return null;
+                    }
                 }
             }
+
 
             return node;
         }
