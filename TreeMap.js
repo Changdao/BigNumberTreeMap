@@ -116,7 +116,7 @@
                 return void 0;
             }
 
-            if (key instanceOf BigNumber) {
+            if (key instanceof BigNumber) {
                 if (key.lt(node.key)) {
                     return internalGet(key, node.left);
                 } else if (key.gt(node.key)) {

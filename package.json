@@ -1,6 +1,6 @@
 {
   "name": "bignumbertreemap-js",
-  "version": "0.5.0",
+  "version": "0.5.3",
   "description": "A binary tree based map (aka dictionary) data type for Javascript, keeping keys sorted at all times",
   "main": "TreeMap.js",
   "repository": {
@@ -17,6 +17,9 @@
     "binary-search-tree",
     "search-tree"
   ],
+  "dependencies":{
+	  "bignumber.js":"^7.2.1"
+  },
   "author": "jameslau@263.net",
   "license": "MIT",
   "bugs": {

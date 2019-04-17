@@ -1,22 +1,29 @@
-# TreeMap.js
+
+# BigNumberTreeMap.js
+This is based on treemap-js. This package extended it to support BigNumber in JavaScript;
+The following is copied from it.
+
 A binary tree based map (aka dictionary) data type for Javascript, keeping keys sorted at all times. Provides `O(log n)` average case performance for inserting, retrieving and removing values.
 
 ## Installation
-Works with Node and in the browser.
+Works with Node.js(treemap.js support Browser, but this package not yet).
 
 ### Node
-Install via `npm install treemap-js`. Then access the TreeMap like this:
+Install via `npm install bignumbertreemap-js`. Then access the TreeMap like this:
 
 ```javascript
-const TreeMap = require("treemap-js");
+const TreeMap = require("bignumbertreemap-js");
 ```
 
 ### Browser
-Include `TreeMap.js` in your HTML. `TreeMap` is automatically appended to the `window` object.
+Not support yet(0.5.3);
 
 ## Usage
 ```javascript
+const BigNumber = require('bignumber.js');
 var map = new TreeMap();
+
+map.set(BigNumber(11.13));
 
 map.set("my first key", "hello");    // keys can be strings, numbers or booleans. Values can be any data type
 map.set("second key", [ 1, 3, 4 ]);
